@@ -58,3 +58,7 @@ router.post('/auth/registration-email-resending', emailExistValidation, isErrorM
 router.get('/auth/me', authMiddleware, isErrorMiddleware, AuthController.me);
 router.post('/auth/refresh-token', AuthController.updatePairTokens);
 
+/**SecurityDevices**/
+router.get('/security/devices',)
+router.delete('/security/devices',)
+router.delete('/security/devices/:deviceId',)
