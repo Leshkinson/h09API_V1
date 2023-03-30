@@ -1,4 +1,4 @@
-import {IUser} from "../../ts/interfaces";
+import {IUser, IDevice} from "../../ts/interfaces";
 
 export class TokenMapper {
     public static prepareAccessModel(model: IUser) {
@@ -7,10 +7,11 @@ export class TokenMapper {
         }
     }
 
-    public static prepareRefreshModel(model: IUser) {
+    public static prepareRefreshModel(model: IUser, model2: IDevice) {
         return {
             id: model._id,
-            email: model.email
+            email: model.email,
+            deviceId: model2.deviceId
         }
     }
 }

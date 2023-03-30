@@ -26,6 +26,10 @@ export class UsersRepository {
         return this.userModel.findOne({$or: [{"login": loginOrEmail}, {"email": loginOrEmail}]})
     }
 
+    // public async findUserByParam(param: string): Promise<IUser | null> {
+    //     return this.userModel.findOne({param})
+    // }
+
     public async findUserByCode(code: string): Promise<IUser | null> {
         return this.userModel.findOne({"code": code})
     }

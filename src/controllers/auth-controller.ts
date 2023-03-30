@@ -3,6 +3,8 @@ import {UserService} from "../services/user-service";
 import {QueryService} from "../services/query-service";
 import {TokenMapper} from "../dto/mappers/token-mapper";
 import {JWT, TokenService} from "../application/token-service";
+import {SessionService} from "../services/session-service";
+import {IDevice} from "../ts/interfaces";
 
 export class AuthController {
 
@@ -10,13 +12,16 @@ export class AuthController {
         try {
             const userService = new UserService();
             const tokenService = new TokenService();
-
+            const sessionService = new SessionService();
             const {loginOrEmail, password} = req.body;
             const user = await userService.verifyUser(loginOrEmail, password);
 
             if (user && user.isConfirmed) {
-                const accessToken = tokenService.generateAccessToken(TokenMapper.prepareAccessModel(user))
-                const refreshToken = tokenService.generateRefreshToken(TokenMapper.prepareRefreshModel(user))
+                const sessionDevice = await sessionService.generateSession(req.ip, req.headers["user-agent"], String(user._id))
+                const accessToken = tokenService.generateAccessToken(TokenMapper.prepareAccessModel(user));
+                const refreshToken = tokenService.generateRefreshToken(TokenMapper.prepareRefreshModel(user, sessionDevice));
+
+
                 res.cookie('refreshToken', refreshToken, {
                         httpOnly: true,
                         secure: true,
@@ -64,6 +69,7 @@ export class AuthController {
         try {
             const tokenService = new TokenService();
             const queryService = new QueryService();
+            const sessionService = new SessionService();
 
             const {refreshToken} = req.cookies
             if (!refreshToken) throw new Error;
@@ -74,8 +80,9 @@ export class AuthController {
             const user = await queryService.findUserByEmail(payload.email)
             if (user) {
                 await tokenService.addTokenToBlackList(refreshToken)
+                const updateSessionDevice = await sessionService.updateSession(payload.deviceId) as IDevice
                 const newAccessToken = tokenService.generateAccessToken(TokenMapper.prepareAccessModel(user))
-                const newRefreshToken = tokenService.generateRefreshToken(TokenMapper.prepareRefreshModel(user))
+                const newRefreshToken = tokenService.generateRefreshToken(TokenMapper.prepareRefreshModel(user, updateSessionDevice))
                 res.cookie('refreshToken', newRefreshToken, {
                         httpOnly: true,
                         secure: true,

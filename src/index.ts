@@ -9,7 +9,7 @@ import {serverConfigService} from "./config/config.service";
 dotenv.config()
 
 const app = express();
-
+app.set('trust proxy', true);
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/', router);
