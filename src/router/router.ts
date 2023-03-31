@@ -60,6 +60,6 @@ router.get('/auth/me', authMiddleware, isErrorMiddleware, AuthController.me);
 router.post('/auth/refresh-token', AuthController.updatePairTokens);
 
 /**SecurityDevices**/
-router.get('/security/devices', SecurityController.getAllDevices)
-router.delete('/security/devices', SecurityController.terminateDevicesSession)
-router.delete('/security/devices/:deviceId', SecurityController.terminateTheDeviceSession)
+router.get('/security/devices', SecurityController.getAllDevices);
+router.delete('/security/devices', SecurityController.terminateDevicesSession);
+router.delete('/security/devices/:deviceId', SecurityController.terminateTheDeviceSession);
