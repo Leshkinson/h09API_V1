@@ -21,7 +21,7 @@ export interface IUser {
     login: string;
     email: string;
     password: string;
-    isConfirmed: boolean,
+    isConfirmed: boolean;
     code: string,
     expirationDate: Date
 }

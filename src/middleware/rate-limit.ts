@@ -1,8 +1,9 @@
-import {Request, Response, NextFunction} from "express";
 import NodeCache from "node-cache";
-let count = 1
+import {Request, Response, NextFunction} from "express";
 
+let count = 1
 const myCache = new NodeCache();
+
 export const rateLimitGuard = async (req: Request, res: Response, next: NextFunction) => {
     const url = req.url
     const tracker = req.ip;
@@ -17,7 +18,7 @@ export const rateLimitGuard = async (req: Request, res: Response, next: NextFunc
         if(Number(foo) > 5) {
             res.sendStatus(429)
 
-            return
+            return;
         }
         count = Number(foo) + 1;
     }

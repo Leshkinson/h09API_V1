@@ -16,6 +16,8 @@ UserSchema.set('toJSON', {
         delete dto._id;
         delete dto.__v;
         delete dto.updatedAt;
+        delete dto.userId;
+        delete dto.createdAt;
     }
 });
 
