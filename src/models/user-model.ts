@@ -17,8 +17,8 @@ UserSchema.set('toJSON', {
         delete dto.__v;
         delete dto.updatedAt;
         delete dto.createdAt ;
-        //delete dto.password;
-        //delete dto.isConfirmed;
+        delete dto.password;
+        delete dto.isConfirmed;
         delete dto.code;
     }
 });
