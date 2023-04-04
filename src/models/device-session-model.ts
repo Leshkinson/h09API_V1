@@ -1,4 +1,3 @@
-import {UserSchema} from "./user-model";
 import {IDevice} from "../ts/interfaces";
 import mongoose, {Schema} from "mongoose";
 
@@ -10,7 +9,7 @@ export const DeviceSchema = new Schema({
     userId: {type: "string", required: true},
 }, {timestamps: true})
 
-UserSchema.set('toJSON', {
+DeviceSchema.set('toJSON', {
     transform: function (doc, dto) {
         dto.id = dto._id;
         delete dto._id;
@@ -21,6 +20,6 @@ UserSchema.set('toJSON', {
     }
 });
 
-UserSchema.set('id', true);
+DeviceSchema.set('id', true);
 
 export const DeviceModel = mongoose.model<IDevice>('Device', DeviceSchema)
