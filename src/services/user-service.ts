@@ -31,7 +31,9 @@ export class UserService {
     public async create(login: string, password: string, email: string): Promise<IUser> {
         const hashPassword = await bcrypt.hash(password, 5);
 
-        return await this.userRepository.createUser(login, hashPassword, email)
+         const a = await this.userRepository.createUser(login, hashPassword, email)
+        console.log('user a service', a)
+        return a
     }
 
     public async findByEmail(email: string): Promise<IUser | null> {
