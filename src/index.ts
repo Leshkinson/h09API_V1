@@ -18,7 +18,7 @@ const start = async (): Promise<void> => {
     try {
         const PORT = serverConfigService.getPort() || 4546;
         await mongoose.connect('mongodb+srv://Oleg_Lopatko:o1l9E9g3@cluster0.dc6pgzh.mongodb.net/?retryWrites=true&w=majority');
-        mongoose.set('strictQuery', false)
+        mongoose.set('strictQuery', true)
         app.listen(PORT, () => {
             console.log(`Server has been listening on port http://localhost:${PORT}`)
         })

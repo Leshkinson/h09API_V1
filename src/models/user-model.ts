@@ -10,16 +10,16 @@ export const UserSchema = new Schema({
     expirationDate: {type: "Date", required: false}
 }, {timestamps: true})
 
-UserSchema.set('toJSON', {
+UserSchema.set('toObject', {
     transform: function (doc, dto) {
-        dto.id = dto._id;
-        delete dto._id;
-        delete dto.__v;
-        delete dto.updatedAt;
-        delete dto.createdAt ;
-        delete dto.password;
-        delete dto.isConfirmed;
-        delete dto.code;
+        // dto.id = dto._id;
+        // delete dto._id;
+        // delete dto.__v;
+        // delete dto.updatedAt;
+        // delete dto.createdAt ;
+        // delete dto.password;
+        // delete dto.isConfirmed;
+        // delete dto.code;
     }
 });
 
