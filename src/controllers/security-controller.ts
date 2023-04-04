@@ -33,6 +33,7 @@ export class SecurityController {
         try {
             const tokenService = new TokenService();
             const queryService = new QueryService();
+            const sessionService = new SessionService();
 
             const {refreshToken} = req.cookies;
             if (!refreshToken) throw new Error;
@@ -42,12 +43,12 @@ export class SecurityController {
             if (!payload) throw new Error;
             const user = await queryService.findUserByEmail(payload.email);
             if (user) {
-
+                await sessionService.deleteSessionWithExcept(String(user._id), payload.deviceId)
+                res.sendStatus(204)
             }
-
         } catch (error) {
             if (error instanceof Error) {
-                res.sendStatus(404);
+                res.sendStatus(401);
                 console.log(error.message);
             }
         }
@@ -57,6 +58,7 @@ export class SecurityController {
         try {
             const tokenService = new TokenService();
             const queryService = new QueryService();
+            const sessionService = new SessionService();
 
             const{deviceId} = req.params;
             const {refreshToken} = req.cookies;
@@ -66,16 +68,22 @@ export class SecurityController {
             const payload = await tokenService.getPayloadByRefreshToken(refreshToken) as JWT;
             if (!payload) throw new Error;
             const user = await queryService.findUserByEmail(payload.email);
-            if (user) {
-
+            if (!user) throw new Error;
+            if(deviceId === payload.deviceId) {
+                await sessionService.deleteTheSession(String(user._id), deviceId)
+                res.sendStatus(204)
+                return
             }
-
-
+            res.sendStatus(403)
         } catch (error) {
             if (error instanceof Error) {
                 res.sendStatus(404);
                 console.log(error.message);
             }
         }
+    }
+
+    static async testLimit(req: Request, res: Response) {
+        res.status(200).json('Hello')
     }
 }

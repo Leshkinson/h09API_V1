@@ -21,7 +21,6 @@ export class AuthController {
                 const accessToken = tokenService.generateAccessToken(TokenMapper.prepareAccessModel(user));
                 const refreshToken = tokenService.generateRefreshToken(TokenMapper.prepareRefreshModel(user, sessionDevice));
 
-
                 res.cookie('refreshToken', refreshToken, {
                         httpOnly: true,
                         secure: true,

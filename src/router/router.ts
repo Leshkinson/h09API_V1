@@ -16,6 +16,7 @@ import {
     userValidation
 } from "../validator/validator";
 import {SecurityController} from "../controllers/security-controller";
+import {rateLimitGuard} from "../middleware/rate-limit";
 
 export const router = Router();
 
@@ -51,11 +52,11 @@ router.delete('/comments/:id', authMiddleware, CommentController.deleteComment);
 router.get('/comments/:id', CommentController.getOneComment);
 
 /**Auth**/
-router.post('/auth/login', AuthController.login);
+router.post('/auth/login', rateLimitGuard, AuthController.login);
 router.post('/auth/logout', AuthController.logout);
-router.post('/auth/registration-confirmation', codeConfirmed, codeConfirmed, isErrorMiddleware, AuthController.confirmEmail);
-router.post('/auth/registration', userValidation, isErrorMiddleware, AuthController.registration);
-router.post('/auth/registration-email-resending', emailExistValidation, isErrorMiddleware, AuthController.resendConfirm);
+router.post('/auth/registration-confirmation', rateLimitGuard, codeConfirmed, codeConfirmed, isErrorMiddleware, AuthController.confirmEmail);
+router.post('/auth/registration', rateLimitGuard, userValidation, isErrorMiddleware, AuthController.registration);
+router.post('/auth/registration-email-resending', rateLimitGuard, emailExistValidation, isErrorMiddleware, AuthController.resendConfirm);
 router.get('/auth/me', authMiddleware, isErrorMiddleware, AuthController.me);
 router.post('/auth/refresh-token', AuthController.updatePairTokens);
 
@@ -63,3 +64,6 @@ router.post('/auth/refresh-token', AuthController.updatePairTokens);
 router.get('/security/devices', SecurityController.getAllDevices);
 router.delete('/security/devices', SecurityController.terminateDevicesSession);
 router.delete('/security/devices/:deviceId', SecurityController.terminateTheDeviceSession);
+
+/**Testing**/
+router.get('/testing/test', rateLimitGuard, SecurityController.testLimit);

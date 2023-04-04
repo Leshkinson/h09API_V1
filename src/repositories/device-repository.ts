@@ -1,5 +1,5 @@
 import {IDevice} from "../ts/interfaces";
-import {Model, RefType, SortOrder} from "mongoose";
+import {Model} from "mongoose";
 import {DeviceModel} from "../models/device-session-model";
 
 export class DeviceRepository {
@@ -29,12 +29,10 @@ export class DeviceRepository {
 
     public async deleteAllWithExcept(userId: string, deviceId: string): Promise<void> {
         await this.deviceModel.deleteMany({$and:[{userId: userId}, {deviceId: {$not: deviceId}}]})
-
     }
 
     public async deleteOne(userId: string, deviceId: string): Promise<void> {
         await this.deviceModel.deleteOne({$and:[{userId: userId}, {deviceId: deviceId}]})
     }
-
 
 }

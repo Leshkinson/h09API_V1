@@ -12,6 +12,7 @@ const settings = {
 export interface JWT extends JwtPayload {
     id: string;
     email: string;
+    deviceId: string;
 }
 
 export class TokenService {

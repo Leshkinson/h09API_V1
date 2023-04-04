@@ -24,4 +24,12 @@ export class SessionService {
     public async getAllSessionByUser(userId: string): Promise<IDevice[] | null> {
         return this.deviceRepository.findAll(userId)
     }
+
+    public async deleteSessionWithExcept(userId: string, deviceId: string): Promise<void> {
+        await this.deviceRepository.deleteAllWithExcept(userId, deviceId)
+    }
+
+    public async deleteTheSession(userId: string, deviceId: string): Promise<void> {
+        await this.deviceRepository.deleteOne(userId, deviceId)
+    }
 }
