@@ -19,6 +19,7 @@ export class SecurityController {
             const user = await queryService.findUserByEmail(payload.email);
             if (user) {
                 const sessions = await sessionService.getAllSessionByUser(String(user._id))
+                console.log('sessions', sessions)
                 res.status(200).json(sessions)
             }
         } catch (error) {

@@ -12,6 +12,7 @@ export const DeviceSchema = new Schema({
 DeviceSchema.set('toJSON', {
     transform: function (doc, dto) {
         dto.id = dto._id;
+        delete dto.id;
         delete dto._id;
         delete dto.__v;
         delete dto.updatedAt;
