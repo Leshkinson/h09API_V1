@@ -28,8 +28,7 @@ export class DeviceRepository {
     }
 
     public async deleteAllWithExcept(userId: string, deviceId: string): Promise<void> {
-        await this.deviceModel.deleteMany({userId: userId})
-        //await this.deviceModel.deleteMany({$and:[{userId: userId}, {$not:{deviceId:deviceId}}]})
+        await this.deviceModel.deleteMany({$and:[{userId: userId}, {deviceId: {$ne:deviceId}}]})
     }
 
     public async deleteOne(userId: string, deviceId: string): Promise<void> {
