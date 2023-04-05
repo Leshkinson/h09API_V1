@@ -63,11 +63,20 @@ export class SecurityController {
 
             const{deviceId} = req.params;
             const {refreshToken} = req.cookies;
-            if (!refreshToken) throw new Error;
+            if (!refreshToken) {
+                res.sendStatus(401)
+                return
+            }
             const isBlockedToken = await tokenService.checkTokenByBlackList(refreshToken);
-            if (isBlockedToken) throw new Error;
+            if (isBlockedToken) {
+                res.sendStatus(401)
+                return
+            }
             const payload = await tokenService.getPayloadByRefreshToken(refreshToken) as JWT;
-            if (!payload) throw new Error;
+            if (!payload) {
+                res.sendStatus(403)
+                return
+            }
             const user = await queryService.findUserByEmail(payload.email);
             if (!user) throw new Error;
             if(deviceId === payload.deviceId) {
@@ -75,10 +84,10 @@ export class SecurityController {
                 res.sendStatus(204)
                 return;
             }
-            res.sendStatus(404)
+            res.sendStatus(403)
         } catch (error) {
             if (error instanceof Error) {
-                res.sendStatus(403);
+                res.sendStatus(404);
                 console.log(error.message);
             }
         }
