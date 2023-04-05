@@ -13,6 +13,7 @@ export class AuthController {
             const userService = new UserService();
             const tokenService = new TokenService();
             const sessionService = new SessionService();
+
             const {loginOrEmail, password} = req.body;
             const user = await userService.verifyUser(loginOrEmail, password);
 
@@ -44,6 +45,8 @@ export class AuthController {
         try {
             const tokenService = new TokenService();
             const queryService = new QueryService();
+            const sessionService = new SessionService();
+
             const {refreshToken} = req.cookies;
             if (!refreshToken) throw new Error;
             const isBlockedToken = await tokenService.checkTokenByBlackList(refreshToken);
@@ -53,6 +56,7 @@ export class AuthController {
             const user = await queryService.findUserByEmail(payload.email);
             if (user) {
                 await tokenService.addTokenToBlackList(refreshToken)
+                await sessionService.deleteTheSession(String(user._id), payload.deviceId)
                 res.clearCookie('refreshToken');
                 res.sendStatus(204);
             }
