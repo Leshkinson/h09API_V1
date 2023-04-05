@@ -81,6 +81,8 @@ export class SecurityController {
             }
             const user = await queryService.findUserByEmail(payload.email);
             if (!user) throw new Error;
+            const session = await sessionService.findSession(deviceId);
+            if (!session) throw new Error;
             //if (deviceId !== payload.deviceId) throw new Error;
             await sessionService.deleteTheSession(String(user._id), deviceId)
             res.sendStatus(204)
