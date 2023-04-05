@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {JWT, TokenService} from "../application/token-service";
 import {QueryService} from "../services/query-service";
 import {SessionService} from "../services/session-service";
+import {JWT, TokenService} from "../application/token-service";
 
 export class SecurityController {
     static async getAllDevices(req: Request, res: Response) {
@@ -18,8 +18,7 @@ export class SecurityController {
             if (!payload) throw new Error;
             const user = await queryService.findUserByEmail(payload.email);
             if (user) {
-                const sessions = await sessionService.getAllSessionByUser(String(user._id))
-                console.log('sessions', sessions)
+                const sessions = await sessionService.getAllSessionByUser(String(user._id));
                 res.status(200).json(sessions)
             }
         } catch (error) {
@@ -37,12 +36,10 @@ export class SecurityController {
             const sessionService = new SessionService();
 
             const {refreshToken} = req.cookies;
-            console.log('refreshToken', refreshToken)
             if (!refreshToken) throw new Error;
             const isBlockedToken = await tokenService.checkTokenByBlackList(refreshToken);
             if (isBlockedToken) throw new Error;
             const payload = await tokenService.getPayloadByRefreshToken(refreshToken) as JWT;
-            console.log('payload', payload)
             if (!payload) {
                 res.sendStatus(403)
                 return
@@ -84,7 +81,7 @@ export class SecurityController {
             }
             const user = await queryService.findUserByEmail(payload.email);
             if (!user) throw new Error;
-            if (deviceId !== payload.deviceId) throw new Error;
+            //if (deviceId !== payload.deviceId) throw new Error;
             await sessionService.deleteTheSession(String(user._id), deviceId)
             res.sendStatus(204)
         } catch (error) {
