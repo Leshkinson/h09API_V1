@@ -37,11 +37,16 @@ export class SecurityController {
             const sessionService = new SessionService();
 
             const {refreshToken} = req.cookies;
+            console.log('refreshToken', refreshToken)
             if (!refreshToken) throw new Error;
             const isBlockedToken = await tokenService.checkTokenByBlackList(refreshToken);
             if (isBlockedToken) throw new Error;
             const payload = await tokenService.getPayloadByRefreshToken(refreshToken) as JWT;
-            if (!payload) throw new Error;
+            console.log('payload', payload)
+            if (!payload) {
+                res.sendStatus(403)
+                return
+            }
             const user = await queryService.findUserByEmail(payload.email);
             if (user) {
                 await sessionService.deleteSessionWithExcept(String(user._id), payload.deviceId)
