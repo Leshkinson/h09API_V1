@@ -61,7 +61,7 @@ export class SecurityController {
             const queryService = new QueryService();
             const sessionService = new SessionService();
 
-            const{deviceId} = req.params;
+            const {deviceId} = req.params;
             const {refreshToken} = req.cookies;
             if (!refreshToken) {
                 res.sendStatus(401)
@@ -79,12 +79,9 @@ export class SecurityController {
             }
             const user = await queryService.findUserByEmail(payload.email);
             if (!user) throw new Error;
-            if(deviceId === payload.deviceId) {
-                await sessionService.deleteTheSession(String(user._id), deviceId)
-                res.sendStatus(204)
-                return;
-            }
-            res.sendStatus(403)
+            if (deviceId !== payload.deviceId) throw new Error;
+            await sessionService.deleteTheSession(String(user._id), deviceId)
+            res.sendStatus(204)
         } catch (error) {
             if (error instanceof Error) {
                 res.sendStatus(404);
