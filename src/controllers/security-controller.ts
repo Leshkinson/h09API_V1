@@ -73,12 +73,12 @@ export class SecurityController {
             if(deviceId === payload.deviceId) {
                 await sessionService.deleteTheSession(String(user._id), deviceId)
                 res.sendStatus(204)
-                return
+                return;
             }
-            res.sendStatus(403)
+            res.sendStatus(404)
         } catch (error) {
             if (error instanceof Error) {
-                res.sendStatus(404);
+                res.sendStatus(403);
                 console.log(error.message);
             }
         }
