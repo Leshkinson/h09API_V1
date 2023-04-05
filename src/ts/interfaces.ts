@@ -46,4 +46,5 @@ export interface IDevice {
     title: string,
     lastActiveDate: string,
     deviceId: string,
+    userId: string,
 }
